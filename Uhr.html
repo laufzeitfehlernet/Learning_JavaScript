@@ -1,0 +1,60 @@
+<html>
+  <head>
+    <meta charset="utf-8">
+    <style>
+       
+      .ansage
+       {
+        background-color: powderblue;
+        padding-top: 25px;
+        padding-bottom: 25px;
+        font-size: 24px;
+        text-align: center;
+        }
+      .uhr 
+       {
+        margin-top: 75px;   
+        margin-left: 450px;
+        background-color: #909090;
+        text-align: center;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50px;
+        width: 500px;
+        height: 200px;
+        font-size: 64px;  
+        font-family: arial;
+        box-shadow: inset 10px 10px 10px #404040;
+
+       }
+      </style>
+  </head>
+
+  <body style='background: #222222;'>
+
+<div id='Ansage' class='ansage' onclick="Uhrzeit();">Wie spät ist es?
+</div>
+<div id='Uhr' class='uhr'></div>
+
+
+<script>
+ function Uhrzeit() {
+  
+  var Datum = new Date();
+  var Stunde = Datum.getHours();
+  var Minute = Datum.getMinutes();
+  var Sekunden = Datum.getSeconds();   
+  if(Stunde < 10) { Stunde = '0' + Stunde;}
+  if(Minute < 10) { Minute = '0' + Minute;}
+  if(Sekunden < 10) { Sekunden = '0' + Sekunden;}
+  document.getElementById('Ansage').innerHTML="Die aktuelle Uhrzeit ist:" ;
+  document.getElementById('Uhr').innerHTML= Stunde + ":" + Minute + ":" + Sekunden;
+  setTimeout(Uhrzeit, 1000);
+    }
+</script>
+
+  </body>
+</html>
+
+  
