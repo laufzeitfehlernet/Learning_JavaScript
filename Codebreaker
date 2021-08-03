@@ -1,0 +1,209 @@
+<html>
+<head>
+  <meta charset="utf-8">
+  <style>
+    .anzeige
+     {
+        margin-top: 25px;   
+        margin-left: 75px;
+        background-color: #EEEEEE;
+        box-shadow: 10px 10px 10px #CCCCCC;
+        font-size: 24px;
+        color:#FF0000;
+        font-family: arial;
+        padding-top: 15px;
+        padding-bottom: 25px;
+        padding-left: 25px;
+        width: 750px;
+        height: 200px;
+        border-radius: 25px;
+
+     }
+     .formular
+     {
+        background-color: #FFFFFF;
+        font-size: 24px;
+        color:#0000FF;
+        font-family: arial;
+        padding-top: 25px;
+        padding-bottom: 25px;
+        padding-left: 25px;
+        width: 100px;
+     }
+     .tippliste
+     {
+        background-color: grey;
+        font-size: 20px;
+        color:#FFFF00;
+        font-family: arial;
+        padding-top: 10px;
+        padding-left: 25px;
+        padding-bottom: 25px;
+        width: 750px;
+        height: 250px;
+        margin-top: 30px;   
+        margin-left: 75px;
+        box-shadow: 10px 10px 10px #CCCCCC;
+        border-radius: 25px;
+
+     }
+     .button
+     {
+         font-size: 24px;
+     }
+  </style>
+</head>
+<div class="anzeige">
+<p id="oben"></p>
+<form onsubmit="return pruefeEingabe();">
+  <input id="eingabe" class="formular" type="text">
+</form>
+<button class="button" id="button" onclick="cancel();"></button>
+</div>
+
+
+<div class="tippliste">
+  <p id="Werte"></p>
+</div>
+
+<script>
+var zahlziffer1;
+var zahlziffer2;
+var zahlziffer3;
+var ziffer1;
+var ziffer2;
+var ziffer3;
+var richtigeStelle;
+var richtigeZahl;
+var AnzahlVersuche = 0;
+var MaxVersuche = 10;
+var SpielzuEnde = false;
+var tipp;
+init();
+
+function init() {
+ zahlziffer1 = zufall(9);
+ zahlziffer2 = zufall(9);
+ zahlziffer3 = zufall(9);
+ AnzahlVersuche = 0;
+ console.log(zahlziffer1 +"~" + zahlziffer2 +"~" + zahlziffer3);
+ document.getElementById("oben").innerHTML = "Versuch den dreistelligen Code zu lösen!";
+ document.getElementById("button").innerHTML = "Abbrechen";
+ document.getElementById('Werte').innerHTML = "";
+ document.getElementById("eingabe").style.display = "initial";
+ tipp = "";
+ SpielzuEnde = false;
+clear();
+
+}
+
+function clear() {
+ document.getElementById("eingabe").value = null;
+}
+
+function zufall(Max) {
+
+return Math.round(Math.random()*Max+0.5);
+
+}
+
+function cancel() {
+    if (SpielzuEnde == false) {
+    var check = confirm("Wollen Sie wirklich abbrechen?");
+    }
+    if (check == true || SpielzuEnde == true ) {
+       init();
+    }
+}
+
+function pruefeEingabe(){
+
+//War die Eingabe überhaupt gültig? 
+  tipp = document.getElementById("eingabe").value; 
+
+//Gab es überhaupt eine Eingabe? 
+  if(tipp == "") {
+      return false;
+  }
+
+var extrahierteZahl = parseInt(tipp);
+if( extrahierteZahl < 100 || extrahierteZahl > 999 || Number.isNaN(extrahierteZahl) ) {
+  alert("Bitte einen gültigen Code eingeben!");
+  clear();
+  return false;
+}
+
+
+  AnzahlVersuche++;
+  
+  richtigeZahl = 0;
+  richtigeStelle = 0;
+
+  ziffer1 = tipp.charAt(0);
+  ziffer2 = tipp.charAt(1);
+  ziffer3 = tipp.charAt(2);
+
+  if(ziffer1 == zahlziffer1) {
+      richtigeStelle++;
+      ziffer1 = "!";
+      }
+  else if(ziffer1 == zahlziffer2 || ziffer1 == zahlziffer3 ) {
+      richtigeZahl++;
+      ziffer1 = "!";
+      }
+
+  if(ziffer2 == zahlziffer2) {
+      richtigeStelle++;
+      ziffer2 = "$";
+      }
+  else if(ziffer2 == zahlziffer1 || ziffer2 == zahlziffer3 ) {
+      richtigeZahl++;
+      ziffer2 = "$";
+      }
+
+  if(ziffer3 == zahlziffer3) {
+      richtigeStelle++;
+      ziffer3="§";
+      }
+  else if(ziffer3 == zahlziffer1 || ziffer3 == zahlziffer2 ) {
+      richtigeZahl++;
+      ziffer3="§";
+  }
+
+//Auswertung
+
+  document.getElementById('Werte').innerHTML = document.getElementById('Werte').innerHTML
+                                            + "Dein Tipp Versuch " + AnzahlVersuche
+                                            + ": <B>" + tipp 
+                                            + "</B> - An der richtigen Stelle: <B>" + richtigeStelle 
+                                            + "</b> - Richtige Zahl: <B>" + richtigeZahl + "</b><br>";
+
+console.log("Es sind " + richtigeStelle + " Ziffern an der richtigen Stelle und " + richtigeZahl + " Ziffern richtig!");
+
+if( AnzahlVersuche >= MaxVersuche ) {
+document.getElementById("oben").innerHTML ="Leider hast Du es nicht geschafft! Die Antwort lautet <B>" 
+                                            + zahlziffer1 + zahlziffer2 + zahlziffer3 +"</B>";
+document.getElementById("eingabe").style.display = "none";
+document.getElementById("button").innerHTML = "Neustarten";
+SpielzuEnde = true;
+}
+
+  if( richtigeStelle == 3)
+  {
+     document.getElementById("oben").innerHTML = "Gratulation! Du hast das Rätsel gelöst!";
+     document.getElementById("eingabe").style.display = "none";
+     document.getElementById("button").innerHTML = "Neustarten";
+     SpielzuEnde = true;
+  }
+
+clear();
+return false;
+
+}
+</script>
+
+
+<body>
+
+</body>
+</html>
